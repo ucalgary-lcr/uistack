@@ -214,10 +214,6 @@ window.addEventListener("click", function(event) {
   }
 });
 
-
-
-
-
 /*------------------------------------*\
   #STICKY-ROW-NAV-JS
 \*------------------------------------*/
@@ -244,10 +240,6 @@ function myFunction() {
     headerRowNav.classList.remove("js-sticky");
   }
 }
-
-
-
-
 
 /*------------------------------------*\
   #MULTI-LEVEL-NAV-DROPDOWNS-JS
@@ -310,10 +302,6 @@ for (let item of items) {
 }
 
 document.addEventListener("click", closeSubmenu, false);
-
-
-
-
 
 /*------------------------------------*\
   #ACCORDIONS-JS
@@ -522,6 +510,4 @@ function magnify(zoom) {
   });
 
 }
-
 magnify(3);
-
