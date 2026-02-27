@@ -35519,7 +35519,7 @@ section.c-hero.c-hero--half .c-hero__text-con--right.c-hero__text-con--red {
   .c-card__horizontal .c-card__horizontal-row .c-card__horizontal-content--col.c-card__horizontal-col--no-gutters .c-card__horizontal-btn--link a:after {
     content: "\f054";
     font-size: 18px;
-    font-family: "Font Awesome 5 Pro";
+    font-family: "Font Awesome 7 Pro";
     font-weight: 900;
     text-decoration: inherit;
     color: inherit;
@@ -35596,7 +35596,7 @@ section.c-hero.c-hero--half .c-hero__text-con--right.c-hero__text-con--red {
   .c-card__ch .c-card__ch-row .c-card__ch-content--col.c-card__ch-col--no-gutters .c-card__ch-btn--link a:after {
     content: "\f054";
     font-size: 18px;
-    font-family: "Font Awesome 5 Pro";
+    font-family: "Font Awesome 7 Pro";
     font-weight: 900;
     text-decoration: inherit;
     color: inherit;
@@ -41253,7 +41253,7 @@ li.c-pagination__item.c-pagination__item-search--hidden {
 }
 .c-profile__back-link::before {
   content: "\f060";
-  font-family: "Font Awesome 5 Pro";
+  font-family: "Font Awesome 7 Pro";
   margin-right: 5px;
 }
 
