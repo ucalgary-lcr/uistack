@@ -19967,7 +19967,7 @@
   font-style: normal;
   font-weight: 900;
   font-display: block;
-  src: url("/webfonts/fa-solid-900.woff2");
+  src: url("https://cdn.jsdelivr.net/gh/ucalgary-lcr/uistack@latest/webfonts/fa-solid-900.woff2");
 }
 .fas {
   --fa-family: var(--fa-family-classic);
@@ -19999,7 +19999,7 @@
   font-style: normal;
   font-weight: 100;
   font-display: block;
-  src: url("/webfonts/fa-thin-100.woff2");
+  src: url("https://cdn.jsdelivr.net/gh/ucalgary-lcr/uistack@latest/webfonts/fa-thin-100.woff2");
 }
 .fat {
   --fa-family: var(--fa-family-classic);
@@ -20024,7 +20024,7 @@
   font-style: normal;
   font-weight: 400;
   font-display: block;
-  src: url("/webfonts/custom-icons.woff2");
+  src: url("https://cdn.jsdelivr.net/gh/ucalgary-lcr/uistack@latest/webfonts/custom-icons.woff2");
 }
 .fak, .fa-kit {
   --fa-family: "Font Awesome Kit";
