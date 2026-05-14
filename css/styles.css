@@ -26125,6 +26125,14 @@ textarea,
 /* Do not show the outline on the skip link target. */
 .skip-link[tabindex="-1"]:focus {
   outline: 0;
+  box-shadow: none;
+}
+
+/* Do not show focus ring on programmatically focused elements that are excluded from tab order. */
+*[tabindex="-1"]:focus,
+*[tabindex="-1"]:focus-visible {
+  outline: 0;
+  box-shadow: none;
 }
 
 @media (min-width: 576px) {
@@ -45362,6 +45370,11 @@ td.c-table__td--sub-cell {
   line-height: 1.55em;
 }
 
+@media (min-width: 768px) {
+  a.c-feed__link-block h3.c-feed__topic {
+    font-size: 1.563em;
+  }
+}
 a.c-feed__link-block .c-feed__img-link--block {
   display: block;
   margin-bottom: 46px;
