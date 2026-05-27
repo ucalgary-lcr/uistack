@@ -33393,6 +33393,30 @@ section.c-hero.c-hero--half .c-hero__text-con--right.c-hero__text-con--red {
     margin-bottom: 25px;
   }
 }
+.c-hero__img-credit {
+  position: absolute;
+  bottom: 0;
+  z-index: 2;
+  font-size: 12px;
+  color: #49251d;
+  -webkit-font-smoothing: initial;
+  -moz-osx-font-smoothing: initial;
+  background-color: #fff;
+  margin-bottom: 0;
+  padding: 10px 15px 9px 15px;
+  border-bottom: 1px solid #efeeec;
+  line-height: 1.4;
+}
+
+@media (min-width: 992px) {
+  .c-hero__img-credit {
+    right: 0;
+    max-width: 800px;
+    font-size: 14px;
+    padding: 12px 30px 11px 30px;
+    border-radius: 4px 0 0 0;
+  }
+}
 /*------------------------------------*\
   #TESTIMONIAL-STYLES (c-testimonial)
 \*------------------------------------*/
