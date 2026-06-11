@@ -27420,8 +27420,11 @@ a.c-header__alert-link {
 
 @media (min-width: 992px) {
   .c-header__toolbox-links-list li a:first-child:nth-last-child(2):after,
+  .c-header__toolbox-links-list li span:first-child:nth-last-child(2):after,
+  .c-header__toolbox-topsites-list li span:first-child:nth-last-child(2):after,
   .c-header__toolbox-topsites-list li a:first-child:nth-last-child(2):after {
-    content: "\f078"; /* down arrow icon. */
+    font-family: "Font Awesome 7 Pro";
+    content: " \f078"; /* down arrow icon. */
   }
 }
 /**
