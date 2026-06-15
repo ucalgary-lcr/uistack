@@ -26155,9 +26155,11 @@ textarea,
 }
 
 /* Do not show the outline on the skip link target. */
+.u-visual--hidden[tabindex="-1"]:focus,
 .skip-link[tabindex="-1"]:focus {
   outline: 0;
   box-shadow: none;
+  display: none;
 }
 
 /* Do not show focus ring on programmatically focused elements that are excluded from tab order. */
