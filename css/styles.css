@@ -27046,7 +27046,7 @@ a.c-header__alert-link {
   right: -2.5px;
   height: 30px;
   width: 30px;
-  padding: 3px 0 0 1px;
+  padding: 1px 0 0 0;
   color: #FFF;
   background-color: #D6001C;
   font-family: "Font Awesome 7 Pro";
@@ -27233,6 +27233,21 @@ a.c-header__alert-link {
     overflow: visible;
   }
 }
+/*
+ * Fix: allow toolbox submenu to escape its container and sit above
+ * the navigation row between 992px and 1199px where overflow:auto
+ * previously clipped absolute children.
+ */
+@media only screen and (min-width: 992px) and (max-width: 1199px) {
+  .c-header__toolbox-con {
+    overflow: visible !important;
+  }
+  .c-header__toolbox {
+    position: relative;
+    z-index: 10; /* higher than .c-header__row-nav (z-index:1) */
+    overflow: visible;
+  }
+}
 /**
  * c-header__toolbox-links and
  * c-header__toolbox-topsites styles.
@@ -27399,6 +27414,12 @@ a.c-header__alert-link {
   -moz-osx-font-smoothing: grayscale;
 }
 
+button.c-header__toolbox-topsites-link {
+  padding-top: 12px;
+  text-align: left;
+  background-color: transparent;
+}
+
 .c-header__toolbox-links-link:visited {
   color: #FFF;
 }
@@ -27456,6 +27477,8 @@ a.c-header__alert-link {
   .c-header__toolbox-links-list li a:first-child:nth-last-child(2):after,
   .c-header__toolbox-links-list li span:first-child:nth-last-child(2):after,
   .c-header__toolbox-topsites-list li span:first-child:nth-last-child(2):after,
+  .c-header__toolbox-links-list li button:first-child:nth-last-child(2):after,
+  .c-header__toolbox-topsites-list li button:first-child:nth-last-child(2):after,
   .c-header__toolbox-topsites-list li a:first-child:nth-last-child(2):after {
     font-family: "Font Awesome 7 Pro";
     content: " \f078"; /* down arrow icon. */
