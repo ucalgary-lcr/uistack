@@ -34,6 +34,11 @@ function initToolbox() {
   if (buttonToolbox && contentToolbox) {
     var toolboxLists = contentToolbox.querySelectorAll('.c-header__toolbox-links-list, .c-header__toolbox-topsites-list');
     
+    // Find the submenu toggle item and its elements
+    var submenuToggleItem = contentToolbox.querySelector('.has-submenu');
+    var dropdownLink = submenuToggleItem ? submenuToggleItem.querySelector('.c-header__toolbox-topsites-link') : null;
+    var submenuLinks = submenuToggleItem ? submenuToggleItem.querySelectorAll('.c-header__toolbox-topsites-list-two a') : [];
+    
     // Set ARIA attributes
     buttonToolbox.setAttribute('aria-expanded', 'false');
     buttonToolbox.setAttribute('aria-controls', 'toolbox-content');
@@ -43,7 +48,96 @@ function initToolbox() {
     contentToolbox.setAttribute('role', 'region');
     contentToolbox.setAttribute('aria-label', 'Toolbox menu');
     
-    // Keyboard support for the button
+    // Function to check if parent toolbox is open
+    function isParentOpen() {
+      return contentToolbox.classList.contains('js-toolbox__content--open');
+    }
+    
+    // Function to toggle submenu
+    function toggleSubmenu() {
+      if (!isParentOpen()) return;
+      
+      var isActive = submenuToggleItem.classList.toggle('has-submenu--active');
+      if (dropdownLink) {
+        dropdownLink.setAttribute('aria-expanded', isActive ? 'true' : 'false');
+      }
+      
+      // Set tabindex for submenu links based on submenu state
+      submenuLinks.forEach(function(link) {
+        link.setAttribute('tabindex', isActive ? '0' : '-1');
+      });
+      
+      // Focus the first submenu link when opened
+      if (isActive) {
+        setTimeout(function() {
+          var firstSubmenuLink = submenuToggleItem.querySelector('.c-header__toolbox-topsites-list-two a:not(.c-header__toolbox-topsites-item-two--back a)');
+          if (firstSubmenuLink) {
+            firstSubmenuLink.focus();
+          }
+        }, 100);
+      }
+    }
+    
+    // Function to close submenu
+    function closeSubmenu() {
+      submenuToggleItem.classList.remove('has-submenu--active');
+      if (dropdownLink) {
+        dropdownLink.setAttribute('aria-expanded', 'false');
+      }
+      submenuLinks.forEach(function(link) {
+        link.setAttribute('tabindex', '-1');
+      });
+      // Return focus to the dropdown button
+      if (dropdownLink) {
+        dropdownLink.focus();
+      }
+    }
+    
+    // Function to setup submenu close handlers
+    function setupSubmenuCloseHandlers() {
+      // Close submenu when clicking outside
+      document.addEventListener('click', function(event) {
+        if (!submenuToggleItem) return;
+        
+        var isClickInsideSubmenu = submenuToggleItem.contains(event.target);
+        var isClickOnDropdownLink = event.target === dropdownLink;
+        var isClickOnToolboxButton = event.target === buttonToolbox || buttonToolbox.contains(event.target);
+        var isClickInsideToolboxContent = contentToolbox.contains(event.target);
+        
+        if (!isClickInsideSubmenu && !isClickOnDropdownLink && !isClickOnToolboxButton && !isClickInsideToolboxContent) {
+          closeSubmenu();
+        }
+      });
+      
+      // Back button handler
+      var backButton = submenuToggleItem ? submenuToggleItem.querySelector('.c-header__toolbox-topsites-item-two--back') : null;
+      if (backButton) {
+        backButton.addEventListener('click', function(event) {
+          event.preventDefault();
+          closeSubmenu();
+        });
+      }
+      
+      // Escape key handler
+      document.addEventListener('keydown', function(event) {
+        if (event.key === 'Escape' && submenuToggleItem && submenuToggleItem.classList.contains('has-submenu--active')) {
+          closeSubmenu();
+        }
+      });
+    }
+    
+    // Set initial tabindex for submenu links
+    submenuLinks.forEach(function(link) {
+      link.setAttribute('tabindex', '-1');
+    });
+    
+    // Set initial tabindex for dropdown link
+    if (dropdownLink) {
+      dropdownLink.setAttribute('tabindex', '0');
+      dropdownLink.setAttribute('aria-expanded', 'false');
+    }
+    
+    // Keyboard support for the main toolbox button
     buttonToolbox.addEventListener('keydown', function(e) {
       if (e.key === 'Enter' || e.key === ' ') {
         e.preventDefault();
@@ -51,13 +145,17 @@ function initToolbox() {
       }
     });
     
-    // Function to close all submenus within toolbox
-    function closeAllSubmenus() {
-      var submenus = contentToolbox.querySelectorAll('.has-submenu--active');
-      submenus.forEach(function(submenu) {
-        submenu.classList.remove('has-submenu--active');
-      });
-    }
+    // Main toolbox button click handler
+    buttonToolbox.onclick = function(e) {
+      e.stopPropagation();
+      var isOpen = contentToolbox.classList.contains("js-toolbox__content--open");
+      
+      if (isOpen) {
+        closeToolbox();
+      } else {
+        openToolbox();
+      }
+    };
     
     // Function to close toolbox with animation
     function closeToolbox() {
@@ -65,7 +163,7 @@ function initToolbox() {
       
       if (isOpen) {
         // First close all submenus
-        closeAllSubmenus();
+        closeSubmenu();
         
         // Then close the toolbox
         contentToolbox.classList.remove("js-toolbox__content--open");
@@ -99,7 +197,7 @@ function initToolbox() {
         
         // Focus the first link after opening
         setTimeout(function() {
-          var firstLink = contentToolbox.querySelector('a');
+          var firstLink = contentToolbox.querySelector('.c-header__toolbox-links-link, .c-header__toolbox-topsites-link');
           if (firstLink) {
             firstLink.focus();
           }
@@ -107,18 +205,52 @@ function initToolbox() {
       });
     }
     
-    buttonToolbox.onclick = function(e) {
-      e.stopPropagation();
-      var isOpen = contentToolbox.classList.contains("js-toolbox__content--open");
+    // Setup submenu functionality if it exists
+    if (submenuToggleItem && dropdownLink) {
       
-      if (isOpen) {
-        closeToolbox();
-      } else {
-        openToolbox();
-      }
-    };
+      // Click handler for dropdown link
+      dropdownLink.addEventListener('click', function(event) {
+        event.preventDefault();
+        event.stopPropagation();
+        toggleSubmenu();
+      });
+      
+      // Keyboard support for dropdown link (Enter and Space)
+      dropdownLink.addEventListener('keydown', function(event) {
+        if ((event.key === 'Enter' || event.key === ' ') && isParentOpen()) {
+          event.preventDefault();
+          event.stopPropagation();
+          toggleSubmenu();
+        }
+      });
+      
+      // Setup submenu close handlers
+      setupSubmenuCloseHandlers();
+      
+      // Handle focus trapping within submenu
+      submenuToggleItem.addEventListener('keydown', function(event) {
+        if (event.key === 'Tab') {
+          var isActive = submenuToggleItem.classList.contains('has-submenu--active');
+          if (isActive) {
+            var links = submenuToggleItem.querySelectorAll('.c-header__toolbox-topsites-list-two a');
+            var firstLink = links[0];
+            var lastLink = links[links.length - 1];
+            
+            if (event.shiftKey && document.activeElement === firstLink) {
+              // Shift+Tab on first link should go back to dropdown button
+              event.preventDefault();
+              dropdownLink.focus();
+            } else if (!event.shiftKey && document.activeElement === lastLink) {
+              // Tab on last link should cycle to first link
+              event.preventDefault();
+              firstLink.focus();
+            }
+          }
+        }
+      });
+    }
     
-    // ESCAPE KEY: Close toolbox and all submenus when Escape key is pressed
+    // ESCAPE KEY: Close toolbox when Escape key is pressed
     document.addEventListener('keydown', function(e) {
       if (e.key === 'Escape') {
         // Check if toolbox is open
