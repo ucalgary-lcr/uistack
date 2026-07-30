@@ -18,250 +18,7 @@
 \*------------------------------------*/
 
 
-/*------------------------------------*\
-  #TOOLBOX-JS
-\*------------------------------------*/
 
-/**
- * when user clicks on toolbox button, open/close content
- * with smooth transition and proper accessibility handling.
- */
-
-function initToolbox() {
-  var buttonToolbox = document.getElementsByClassName("js-toolbox__button")[0];
-  var contentToolbox = document.getElementsByClassName("js-toolbox__content")[0];
-  
-  if (buttonToolbox && contentToolbox) {
-    var toolboxLists = contentToolbox.querySelectorAll('.c-header__toolbox-links-list, .c-header__toolbox-topsites-list');
-    
-    // Find the submenu toggle item and its elements
-    var submenuToggleItem = contentToolbox.querySelector('.has-submenu');
-    var dropdownLink = submenuToggleItem ? submenuToggleItem.querySelector('.c-header__toolbox-topsites-link') : null;
-    var submenuLinks = submenuToggleItem ? submenuToggleItem.querySelectorAll('.c-header__toolbox-topsites-list-two a') : [];
-    
-    // Set ARIA attributes
-    buttonToolbox.setAttribute('aria-expanded', 'false');
-    buttonToolbox.setAttribute('aria-controls', 'toolbox-content');
-    buttonToolbox.setAttribute('aria-haspopup', 'true');
-    contentToolbox.setAttribute('id', 'toolbox-content');
-    contentToolbox.setAttribute('aria-hidden', 'true');
-    contentToolbox.setAttribute('role', 'region');
-    contentToolbox.setAttribute('aria-label', 'Toolbox menu');
-    
-    // Function to check if parent toolbox is open
-    function isParentOpen() {
-      return contentToolbox.classList.contains('js-toolbox__content--open');
-    }
-    
-    // Function to toggle submenu
-    function toggleSubmenu() {
-      if (!isParentOpen()) return;
-      
-      var isActive = submenuToggleItem.classList.toggle('has-submenu--active');
-      if (dropdownLink) {
-        dropdownLink.setAttribute('aria-expanded', isActive ? 'true' : 'false');
-      }
-      
-      // Set tabindex for submenu links based on submenu state
-      submenuLinks.forEach(function(link) {
-        link.setAttribute('tabindex', isActive ? '0' : '-1');
-      });
-      
-      // Focus the first submenu link when opened
-      if (isActive) {
-        setTimeout(function() {
-          var firstSubmenuLink = submenuToggleItem.querySelector('.c-header__toolbox-topsites-list-two a:not(.c-header__toolbox-topsites-item-two--back a)');
-          if (firstSubmenuLink) {
-            firstSubmenuLink.focus();
-          }
-        }, 100);
-      }
-    }
-    
-    // Function to close submenu
-    function closeSubmenu() {
-      submenuToggleItem.classList.remove('has-submenu--active');
-      if (dropdownLink) {
-        dropdownLink.setAttribute('aria-expanded', 'false');
-      }
-      submenuLinks.forEach(function(link) {
-        link.setAttribute('tabindex', '-1');
-      });
-      // Return focus to the dropdown button
-      if (dropdownLink) {
-        dropdownLink.focus();
-      }
-    }
-    
-    // Function to setup submenu close handlers
-    function setupSubmenuCloseHandlers() {
-      // Close submenu when clicking outside
-      document.addEventListener('click', function(event) {
-        if (!submenuToggleItem) return;
-        
-        var isClickInsideSubmenu = submenuToggleItem.contains(event.target);
-        var isClickOnDropdownLink = event.target === dropdownLink;
-        var isClickOnToolboxButton = event.target === buttonToolbox || buttonToolbox.contains(event.target);
-        var isClickInsideToolboxContent = contentToolbox.contains(event.target);
-        
-        if (!isClickInsideSubmenu && !isClickOnDropdownLink && !isClickOnToolboxButton && !isClickInsideToolboxContent) {
-          closeSubmenu();
-        }
-      });
-      
-      // Back button handler
-      var backButton = submenuToggleItem ? submenuToggleItem.querySelector('.c-header__toolbox-topsites-item-two--back') : null;
-      if (backButton) {
-        backButton.addEventListener('click', function(event) {
-          event.preventDefault();
-          closeSubmenu();
-        });
-      }
-      
-      // Escape key handler
-      document.addEventListener('keydown', function(event) {
-        if (event.key === 'Escape' && submenuToggleItem && submenuToggleItem.classList.contains('has-submenu--active')) {
-          closeSubmenu();
-        }
-      });
-    }
-    
-    // Set initial tabindex for submenu links
-    submenuLinks.forEach(function(link) {
-      link.setAttribute('tabindex', '-1');
-    });
-    
-    // Set initial tabindex for dropdown link
-    if (dropdownLink) {
-      dropdownLink.setAttribute('tabindex', '0');
-      dropdownLink.setAttribute('aria-expanded', 'false');
-    }
-    
-    // Keyboard support for the main toolbox button
-    buttonToolbox.addEventListener('keydown', function(e) {
-      if (e.key === 'Enter' || e.key === ' ') {
-        e.preventDefault();
-        this.click();
-      }
-    });
-    
-    // Main toolbox button click handler
-    buttonToolbox.onclick = function(e) {
-      e.stopPropagation();
-      var isOpen = contentToolbox.classList.contains("js-toolbox__content--open");
-      
-      if (isOpen) {
-        closeToolbox();
-      } else {
-        openToolbox();
-      }
-    };
-    
-    // Function to close toolbox with animation
-    function closeToolbox() {
-      var isOpen = contentToolbox.classList.contains("js-toolbox__content--open");
-      
-      if (isOpen) {
-        // First close all submenus
-        closeSubmenu();
-        
-        // Then close the toolbox
-        contentToolbox.classList.remove("js-toolbox__content--open");
-        buttonToolbox.classList.remove("js-toolbox__button--open");
-        buttonToolbox.setAttribute('aria-expanded', 'false');
-        contentToolbox.setAttribute('aria-hidden', 'true');
-        
-        // Return focus to the button
-        buttonToolbox.focus();
-        
-        // Wait for animation to complete, THEN apply display none
-        setTimeout(function() {
-          toolboxLists.forEach(function(list) {
-            list.style.display = 'none';
-          });
-        }, 500);
-      }
-    }
-    
-    // Function to open toolbox
-    function openToolbox() {
-      toolboxLists.forEach(function(list) {
-        list.style.display = 'flex';
-      });
-      
-      requestAnimationFrame(function() {
-        contentToolbox.classList.add("js-toolbox__content--open");
-        buttonToolbox.classList.add("js-toolbox__button--open");
-        buttonToolbox.setAttribute('aria-expanded', 'true');
-        contentToolbox.setAttribute('aria-hidden', 'false');
-        
-        // Focus the first link after opening
-        setTimeout(function() {
-          var firstLink = contentToolbox.querySelector('.c-header__toolbox-links-link, .c-header__toolbox-topsites-link');
-          if (firstLink) {
-            firstLink.focus();
-          }
-        }, 100);
-      });
-    }
-    
-    // Setup submenu functionality if it exists
-    if (submenuToggleItem && dropdownLink) {
-      
-      // Click handler for dropdown link
-      dropdownLink.addEventListener('click', function(event) {
-        event.preventDefault();
-        event.stopPropagation();
-        toggleSubmenu();
-      });
-      
-      // Keyboard support for dropdown link (Enter and Space)
-      dropdownLink.addEventListener('keydown', function(event) {
-        if ((event.key === 'Enter' || event.key === ' ') && isParentOpen()) {
-          event.preventDefault();
-          event.stopPropagation();
-          toggleSubmenu();
-        }
-      });
-      
-      // Setup submenu close handlers
-      setupSubmenuCloseHandlers();
-      
-      // Handle focus trapping within submenu
-      submenuToggleItem.addEventListener('keydown', function(event) {
-        if (event.key === 'Tab') {
-          var isActive = submenuToggleItem.classList.contains('has-submenu--active');
-          if (isActive) {
-            var links = submenuToggleItem.querySelectorAll('.c-header__toolbox-topsites-list-two a');
-            var firstLink = links[0];
-            var lastLink = links[links.length - 1];
-            
-            if (event.shiftKey && document.activeElement === firstLink) {
-              // Shift+Tab on first link should go back to dropdown button
-              event.preventDefault();
-              dropdownLink.focus();
-            } else if (!event.shiftKey && document.activeElement === lastLink) {
-              // Tab on last link should cycle to first link
-              event.preventDefault();
-              firstLink.focus();
-            }
-          }
-        }
-      });
-    }
-    
-    // ESCAPE KEY: Close toolbox when Escape key is pressed
-    document.addEventListener('keydown', function(e) {
-      if (e.key === 'Escape') {
-        // Check if toolbox is open
-        if (contentToolbox.classList.contains("js-toolbox__content--open")) {
-          closeToolbox();
-          e.preventDefault(); // Prevent any default Escape behavior
-        }
-      }
-    });
-  }
-}
 
 
 /*------------------------------------*\
@@ -274,10 +31,33 @@ function initToolbox() {
  */
 
 window.onload = function() {
-  // Initialize toolbox with improved handling
-  initToolbox();
+  // gets 'js-toolbox__button' and 'js-toolbox__content'.
+  var buttonToolbox = document.getElementsByClassName("js-toolbox__button")[0];
+  var contentToolbox = document.getElementsByClassName("js-toolbox__content")[0];
+  // when 'js-toolbox__button' is clicked open 'js-toolbox__content'.
+  buttonToolbox.onclick = function() {
+    contentToolbox.classList.toggle("js-toolbox__content--open");
+    buttonToolbox.classList.toggle("js-toolbox__button--open");
+  }
+  // var buttonToolbox = document.getElementsByClassName("js-toolbox__button");
+  // var contentToolbox = document.getElementsByClassName("js-toolbox__content");
+
+  // Array.from(buttonToolbox).forEach(bt =>
+  //   bt.onclick = function() {
+  //     Array.from(contentToolbox).forEach(ct =>
+  //       ct.classList.toggle("js-toolbox__content")
+  //       );
+  //     bt.classList.toggle("js-toolbox__button");
+  //   });
 
   // gets 'js-alert__button' and 'js-alert__content'.
+  // var buttonAlert = document.getElementsByClassName("js-alert__button")[0];
+  // var contentAlert = document.getElementsByClassName("js-alert__content")[0];
+  // when 'js-alert__button' is clicked open 'js-alert__content'.
+  // buttonAlert.onclick = function() {
+  //   contentAlert.classList.toggle("js-alert__content--open");
+  //   buttonAlert.classList.toggle("js-alert__button--open");
+  // }
   var buttonAlert = document.getElementsByClassName("js-alert__button");
   var contentAlert = document.getElementsByClassName("js-alert__content");
   Array.from(buttonAlert).forEach(ba =>
@@ -358,6 +138,7 @@ window.onload = function() {
 
 
 
+
 /*------------------------------------*\
   #EVENT-LISTENERS-ONCLICKS
 \*------------------------------------*/
@@ -385,44 +166,6 @@ window.addEventListener("click", function(event) {
       if (openAlertBtn.classList.contains("js-alert__button--open")) {
         openAlertBtn.classList.remove("js-alert__button--open");
       }
-    }
-  }
-
-  // js-toolbox__content. removes 'js-toolbox__content--open' class.
-  // Check if click is NOT on the toolbox button AND NOT inside the toolbox content
-  var toolboxBtn = document.getElementsByClassName("js-toolbox__button")[0];
-  var toolboxContent = document.getElementsByClassName("js-toolbox__content")[0];
-  
-  // Check if the click target is inside the toolbox content
-  var isClickInsideToolbox = toolboxContent && toolboxContent.contains(event.target);
-  var isClickOnToolboxButton = toolboxBtn && toolboxBtn.contains(event.target);
-  
-  // Only close if click is outside both the button AND the content
-  if (!isClickOnToolboxButton && !isClickInsideToolbox) {
-    if (toolboxContent && toolboxContent.classList.contains("js-toolbox__content--open")) {
-      // Close all submenus first
-      var submenus = toolboxContent.querySelectorAll('.has-submenu--active');
-      submenus.forEach(function(submenu) {
-        submenu.classList.remove('has-submenu--active');
-      });
-      
-      // Remove the open class to trigger the animation
-      toolboxContent.classList.remove("js-toolbox__content--open");
-      
-      // Update ARIA attributes
-      if (toolboxBtn) {
-        toolboxBtn.setAttribute('aria-expanded', 'false');
-        toolboxBtn.classList.remove("js-toolbox__button--open");
-      }
-      toolboxContent.setAttribute('aria-hidden', 'true');
-      
-      // Apply display none AFTER animation completes
-      var lists = toolboxContent.querySelectorAll('.c-header__toolbox-links-list, .c-header__toolbox-topsites-list');
-      setTimeout(function() {
-        lists.forEach(function(list) {
-          list.style.display = 'none';
-        });
-      }, 500);
     }
   }
   
@@ -477,11 +220,10 @@ window.addEventListener("click", function(event) {
 
 /**
  * when the user scrolls the page, execute myFunction
- * currently commented out as ucalgary no longer uses
- * a sticky nav row on any screen size 20251210.
+ * currently commented out due to conflicts and testing
+ * required.
  */
 
-/*
 window.onscroll = function() {myFunction()};
 
 // gets the nav row in the header.
@@ -498,7 +240,6 @@ function myFunction() {
     headerRowNav.classList.remove("js-sticky");
   }
 }
-*/
 
 /*------------------------------------*\
   #MULTI-LEVEL-NAV-DROPDOWNS-JS
@@ -697,3 +438,76 @@ window.onclick = function(event) {
     event.target.style.display = "none";
   }
 }
+
+/*------------------------------------*\
+  #MAGNIFIER-GLASS-JS
+\*------------------------------------*/
+
+function magnify(zoom) {
+  var images;
+  images = document.querySelectorAll(('.c-img__zoom'));
+
+  images.forEach(img =>
+  {
+    var glass, w, h, bw;
+
+    /* Create magnifier glass: */
+    glass = document.createElement("DIV");
+    glass.setAttribute("class", "img-magnifier-glass");
+
+    /* Insert magnifier glass: */
+    img.parentElement.insertBefore(glass, img);
+
+    /* Set background properties for the magnifier glass: */
+    glass.style.backgroundImage = "url('" + img.src + "')";
+    glass.style.backgroundRepeat = "no-repeat";
+    glass.style.backgroundSize = (img.width * zoom) + "px " + (img.height * zoom) + "px";
+    bw = 3;
+    w = glass.offsetWidth / 2;
+    h = glass.offsetHeight / 2;
+
+    /* Execute a function when someone moves the magnifier glass over the image: */
+    glass.addEventListener("mousemove", moveMagnifier);
+    img.addEventListener("mousemove", moveMagnifier);
+
+    /*and also for touch screens:*/
+    glass.addEventListener("touchmove", moveMagnifier);
+    img.addEventListener("touchmove", moveMagnifier);
+
+    function moveMagnifier(e) {
+      var pos, x, y;
+      /* Prevent any other actions that may occur when moving over the image */
+      e.preventDefault();
+      /* Get the cursor's x and y positions: */
+      pos = getCursorPos(e);
+      x = pos.x;
+      y = pos.y;
+      /* Prevent the magnifier glass from being positioned outside the image: */
+      if (x > img.width - (w / zoom)) {x = img.width - (w / zoom);}
+      if (x < w / zoom) {x = w / zoom;}
+      if (y > img.height - (h / zoom)) {y = img.height - (h / zoom);}
+      if (y < h / zoom) {y = h / zoom;}
+      /* Set the position of the magnifier glass: */
+      glass.style.left = (x - w) + "px";
+      glass.style.top = (y - h) + "px";
+      /* Display what the magnifier glass "sees": */
+      glass.style.backgroundPosition = "-" + ((x * zoom) - w + bw) + "px -" + ((y * zoom) - h + bw) + "px";
+    }
+
+    function getCursorPos(e) {
+      var a, x = 0, y = 0;
+      e = e || window.event;
+      /* Get the x and y positions of the image: */
+      a = img.getBoundingClientRect();
+      /* Calculate the cursor's x and y coordinates, relative to the image: */
+      x = e.pageX - a.left;
+      y = e.pageY - a.top;
+      /* Consider any page scrolling: */
+      x = x - window.pageXOffset;
+      y = y - window.pageYOffset;
+      return {x : x, y : y};
+    }
+  });
+
+}
+magnify(3);
