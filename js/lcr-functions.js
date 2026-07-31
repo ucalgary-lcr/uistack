@@ -224,22 +224,22 @@ window.addEventListener("click", function(event) {
  * required.
  */
 
-window.onscroll = function() {myFunction()};
+// window.onscroll = function() {myFunction()};
 
 // gets the nav row in the header.
-var headerRowNav = document.getElementsByClassName("c-header__row-nav")[0];
+// var headerRowNav = document.getElementsByClassName("c-header__row-nav")[0];
 
 // gets the offset position of the nav row.
-var sticky = headerRowNav.offsetTop;
+// var sticky = headerRowNav.offsetTop;
 
 // adds and removes js-sticky class to the nav row at scroll position.
-function myFunction() {
-  if (window.pageYOffset > sticky) {
-    headerRowNav.classList.add("js-sticky");
-  } else {
-    headerRowNav.classList.remove("js-sticky");
-  }
-}
+// function myFunction() {
+//   if (window.pageYOffset > sticky) {
+//     headerRowNav.classList.add("js-sticky");
+//   } else {
+//     headerRowNav.classList.remove("js-sticky");
+//   }
+// }
 
 /*------------------------------------*\
   #MULTI-LEVEL-NAV-DROPDOWNS-JS
