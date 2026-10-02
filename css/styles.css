@@ -22708,6 +22708,146 @@ html {
     -ms-flex-order: 12;
     order: 12;
   }
+  .l-order--md-13 {
+    -webkit-box-ordinal-group: 14;
+    -ms-flex-order: 13;
+    order: 13;
+  }
+  .l-order--md-14 {
+    -webkit-box-ordinal-group: 15;
+    -ms-flex-order: 14;
+    order: 14;
+  }
+  .l-order--md-15 {
+    -webkit-box-ordinal-group: 16;
+    -ms-flex-order: 15;
+    order: 15;
+  }
+  .l-order--md-16 {
+    -webkit-box-ordinal-group: 17;
+    -ms-flex-order: 16;
+    order: 16;
+  }
+  .l-order--md-17 {
+    -webkit-box-ordinal-group: 18;
+    -ms-flex-order: 17;
+    order: 17;
+  }
+  .l-order--md-18 {
+    -webkit-box-ordinal-group: 19;
+    -ms-flex-order: 18;
+    order: 18;
+  }
+  .l-order--md-19 {
+    -webkit-box-ordinal-group: 20;
+    -ms-flex-order: 19;
+    order: 19;
+  }
+  .l-order--md-20 {
+    -webkit-box-ordinal-group: 21;
+    -ms-flex-order: 20;
+    order: 20;
+  }
+  .l-order--md-21 {
+    -webkit-box-ordinal-group: 22;
+    -ms-flex-order: 21;
+    order: 21;
+  }
+  .l-order--md-22 {
+    -webkit-box-ordinal-group: 23;
+    -ms-flex-order: 22;
+    order: 22;
+  }
+  .l-order--md-23 {
+    -webkit-box-ordinal-group: 24;
+    -ms-flex-order: 23;
+    order: 23;
+  }
+  .l-order--md-24 {
+    -webkit-box-ordinal-group: 25;
+    -ms-flex-order: 24;
+    order: 24;
+  }
+  .l-order--md-25 {
+    -webkit-box-ordinal-group: 26;
+    -ms-flex-order: 25;
+    order: 25;
+  }
+  .l-order--md-26 {
+    -webkit-box-ordinal-group: 27;
+    -ms-flex-order: 26;
+    order: 26;
+  }
+  .l-order--md-27 {
+    -webkit-box-ordinal-group: 28;
+    -ms-flex-order: 27;
+    order: 27;
+  }
+  .l-order--md-28 {
+    -webkit-box-ordinal-group: 29;
+    -ms-flex-order: 28;
+    order: 28;
+  }
+  .l-order--md-29 {
+    -webkit-box-ordinal-group: 30;
+    -ms-flex-order: 29;
+    order: 29;
+  }
+  .l-order--md-30 {
+    -webkit-box-ordinal-group: 31;
+    -ms-flex-order: 30;
+    order: 30;
+  }
+  .l-order--md-31 {
+    -webkit-box-ordinal-group: 32;
+    -ms-flex-order: 31;
+    order: 31;
+  }
+  .l-order--md-32 {
+    -webkit-box-ordinal-group: 33;
+    -ms-flex-order: 32;
+    order: 32;
+  }
+  .l-order--md-33 {
+    -webkit-box-ordinal-group: 34;
+    -ms-flex-order: 33;
+    order: 33;
+  }
+  .l-order--md-34 {
+    -webkit-box-ordinal-group: 35;
+    -ms-flex-order: 34;
+    order: 34;
+  }
+  .l-order--md-35 {
+    -webkit-box-ordinal-group: 36;
+    -ms-flex-order: 35;
+    order: 35;
+  }
+  .l-order--md-36 {
+    -webkit-box-ordinal-group: 37;
+    -ms-flex-order: 36;
+    order: 36;
+  }
+  .l-order--md-37 {
+    -webkit-box-ordinal-group: 38;
+    -ms-flex-order: 37;
+    order: 37;
+  }
+  .l-order--md-38 {
+    -webkit-box-ordinal-group: 39;
+    -ms-flex-order: 38;
+    order: 38;
+  }
+  .l-order--md-39 {
+    -webkit-box-ordinal-group: 40;
+    -ms-flex-order: 39;
+    order: 39;
+  }
+  .l-order--md-40 {
+    -webkit-box-ordinal-group: 41;
+    -ms-flex-order: 40;
+    order: 40;
+  }
   .l-offset--md-0 {
     margin-left: 0;
   }
@@ -46338,7 +46478,7 @@ a.c-feed__link-block .c-feed__description {
     object-position: center 20%;
   }
 }
-/***
+/**
  * c-hero--mini variant. features title text
  * appearing below instead of over the top of image.
 ***/
